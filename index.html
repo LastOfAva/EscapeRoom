@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Escape Room IT — gioco formativo per tecnici IT junior su storage, virtualizzazione, network e security."
+    />
+    <title>Escape Room IT — Lockdown in Datacenter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='20' font-size='20'%3E%F0%9F%94%92%3C/text%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Effetto scanline/CRT sovrapposto -->
+    <div class="scanlines" aria-hidden="true"></div>
+    <div class="grid-bg" aria-hidden="true"></div>
+
+    <!-- Punto di montaggio: tutto il gioco viene renderizzato qui da game.js -->
+    <main id="app" class="app"></main>
+
+    <footer class="site-foot">
+      Escape Room IT · strumento formativo per tecnici · storage · virtualizzazione · network · security
+    </footer>
+
+    <!-- Avviso per browser con JavaScript disattivato -->
+    <noscript>
+      <p style="color:#fff;text-align:center;padding:2rem">
+        Questo gioco richiede JavaScript attivo nel browser.
+      </p>
+    </noscript>
+
+    <!-- I dati (enigmi) vanno caricati prima del motore -->
+    <script src="js/rooms.js"></script>
+    <script src="js/game.js"></script>
+  </body>
+</html>

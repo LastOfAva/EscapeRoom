@@ -1,0 +1,9 @@
+# Dipendenze (non ne servono, ma per sicurezza)
+node_modules/
+
+# File di sistema / editor
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
