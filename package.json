@@ -1,22 +1,23 @@
 {
-  "name": "escape-room-it",
-  "version": "1.0.0",
-  "description": "Escape room tecnica formativa per tecnici IT junior: storage, virtualizzazione, network e security. HTML/CSS/JS statico, nessuna dipendenza.",
+  "name": "datacenter-lockdown",
+  "version": "2.0.0",
+  "description": "Escape room grafica punta-e-clicca per tecnici IT junior: storage, virtualizzazione, network e security. HTML5 Canvas, nessuna dipendenza.",
   "private": true,
   "scripts": {
-    "test": "node test/validate-data.js",
+    "test": "node test/logic.test.js && node quiz/test/validate-data.js",
     "serve": "python3 -m http.server 8000",
     "start": "python3 -m http.server 8000"
   },
   "keywords": [
     "escape-room",
+    "game",
+    "canvas",
     "it-training",
     "storage",
     "virtualization",
     "network",
     "security",
-    "formazione",
-    "gioco-formativo"
+    "formazione"
   ],
   "license": "MIT"
 }

@@ -1,104 +1,59 @@
-# 🔒 Escape Room IT — "Lockdown in Datacenter"
+# 🖥️ Datacenter Lockdown — Escape Room IT (gioco grafico)
 
-Una **escape room tecnica** giocabile nel browser, pensata per la **formazione di tecnici IT junior**.
-Il giocatore è il tecnico di turno notturno: un'anomalia ha messo il datacenter in *lockdown* e, per
-uscire, deve attraversare **4 zone blindate** dimostrando competenza in **Storage, Virtualizzazione,
-Network** e **Security**. Ogni zona superata consegna un **frammento** della chiave maestra che apre la
-porta finale.
+Una **escape room grafica punta-e-clicca**, giocabile nel browser, per la **formazione di tecnici IT junior**.
+Sei chiuso in una sala datacenter andata in *lockdown*: **esplori la stanza cliccando sugli apparati** e risolvi
+**quattro enigmi pratici** — costruisci un array RAID trascinando i dischi, assegni le VM al host, ricolleghi i cavi
+di rete, individui l'intruso nei log — per ottenere le **4 cifre** del codice e aprire la **porta blindata**.
 
-> Livello: **Junior / onboarding** · Lingua: **Italiano** · Durata stimata: **30–45 minuti**
-> Nessuna installazione, nessuna dipendenza: è tutto HTML/CSS/JavaScript statico.
+> Niente domande a risposta multipla: **si gioca manipolando gli oggetti**.
+> HTML5 Canvas + JavaScript, **nessuna dipendenza, nessuna installazione**. Funziona anche offline.
+
+![Anteprima della sala datacenter](docs/preview.png)
 
 ---
 
 ## ▶️ Come si gioca
 
-**Opzione 1 — apri il file (più semplice):**
-fai doppio clic su **`index.html`**: si apre nel browser e funziona subito, anche offline.
+**Opzione 1 — apri il file:** doppio clic su **`index.html`** → parte nel browser.
 
 **Opzione 2 — server locale (consigliata in aula):**
-
 ```bash
-# con Python (di solito già presente)
-python3 -m http.server 8000
-# poi visita http://localhost:8000
+python3 -m http.server 8000      # poi vai su http://localhost:8000
 ```
 
-Funziona su qualunque browser moderno (Chrome, Edge, Firefox, Safari), anche da tablet/smartphone.
-I progressi vengono salvati automaticamente nel browser (`localStorage`): puoi chiudere e riprendere.
+Funziona con mouse **e touch** (tablet/smartphone): gli enigmi col trascinamento usano i *pointer events*.
+I progressi si salvano da soli nel browser: puoi chiudere e riprendere.
+
+**Obiettivo:** clicca i 4 apparati luminescenti, risolvi i loro enigmi (ognuno dà una cifra), poi clicca la
+**porta blindata** e digita il codice a 4 cifre sul tastierino per scappare.
 
 ---
 
-## 🎯 Le 4 zone e gli obiettivi didattici
+## 🧩 La stanza e le 4 stazioni interattive
 
-| Zona | Tema | Concetti chiave |
-|------|------|-----------------|
-| 1 · **Storage** | Dischi e array | RAID 0/1/5, capacità utile, snapshot, iSCSI/NFS/SMB |
-| 2 · **Virtualizzazione** | Hypervisor e VM | Tipo 1 vs Tipo 2, VM vs container, live migration (vMotion) |
-| 3 · **Network** | Reti TCP/IP | IP privati (RFC 1918), subnet /24, porte note, default gateway, broadcast |
-| 4 · **Security** | Sicurezza di base | Triade CIA, hashing vs cifratura, phishing, MFA, lettura log, least privilege |
+| Apparato | Tema | Cosa fai (gameplay) | Cosa impari |
+|----------|------|---------------------|-------------|
+| 🟦 **Rack Storage** | Storage / RAID | **Trascini i dischi** nell'array e scegli il livello RAID per ottenere la capacità utile richiesta con ridondanza | RAID 0/1/5, capacità utile, tolleranza ai guasti |
+| 🟪 **Host VM** | Virtualizzazione | **Trascini le VM** sul host rispettando la RAM disponibile | Consolidamento, RAM, overcommit |
+| 🟩 **Patch Panel** | Network | **Colleghi i nodi** (clic-per-collegare) per ripristinare il percorso PC→Switch→Router→Internet | Topologia, percorso dati, gateway |
+| 🟥 **Terminale SOC** | Security | **Clicchi nel log** l'IP che fa brute-force per bloccarlo al firewall | Analisi log, riconoscere un attacco |
 
-Ogni enigma è pensato per **insegnare**, non solo per valutare:
+Poi: 🚪 **Porta blindata** → tastierino numerico dove inserire il codice raccolto.
 
-- **Indizi progressivi** su ogni domanda (💡), per non bloccarsi mai.
-- **Spiegazione didattica** mostrata dopo ogni risposta corretta ("&gt; PERCHÉ").
-- **Tentativi illimitati**: l'obiettivo è imparare.
-- **Cronometro e punteggio** solo come statistica/gamification (nessun "game over").
-
-Al termine il giocatore riceve un **grado** in base al punteggio (es. 🥇 *Tecnico IT Certificato*).
+Ogni enigma ha un **indizio** (💡) e un **feedback live** (es. la barra RAM che diventa rossa in overcommit,
+il pacchetto che viaggia sui cavi quando la rete è a posto). Pensato per livello **junior/onboarding**:
+tentativi illimitati, nessun *game over*.
 
 ---
 
-## 🧑‍🏫 Note per chi conduce la formazione
+## ✨ Caratteristiche
 
-- **Onboarding di gruppo:** proietta il gioco e fai rispondere il team a turno, commentando ogni
-  spiegazione. Ottimo come "rompighiaccio" tecnico nei primi giorni.
-- **Autoapprendimento:** condividi semplicemente la cartella o l'URL; ognuno gioca al proprio ritmo.
-- **Gara a squadre:** confronta punteggio, tempo e numero di indizi usati (mostrati nella schermata finale).
-- **Reset:** il pulsante ↺ nella barra in alto (o "Ricomincia da capo") azzera i progressi salvati.
-
----
-
-## ➕ Come aggiungere o modificare gli enigmi
-
-Tutti i contenuti sono in **`js/rooms.js`**, separati dalla logica di gioco: puoi modificarli senza
-toccare il motore. Ogni enigma supporta tre tipi:
-
-```js
-// Scelta multipla (una risposta corretta)
-{ id: "ex1", type: "mc",
-  question: "Domanda…",
-  options: ["A", "B", "C"],
-  answer: 1,                 // indice dell'opzione corretta (0-based)
-  hints: ["Indizio 1", "…"],
-  explanation: "Perché la risposta è questa…" }
-
-// Selezione multipla (più risposte corrette)
-{ id: "ex2", type: "multi",
-  options: ["A", "B", "C", "D"],
-  answer: [0, 2],            // indici corretti
-  /* question, hints, explanation … */ }
-
-// Risposta da digitare
-{ id: "ex3", type: "text",
-  accept: ["10.0.0.1"],      // risposte accettate (confronto senza maiuscole/spazi)
-  placeholder: "es. …",
-  pre: "blocco di testo monospazio opzionale (es. un log)",
-  /* question, hints, explanation … */ }
-```
-
-Per **aggiungere una zona** copia un blocco `room` in `js/rooms.js` (servono `id`, `title`, `subtitle`,
-`icon` SVG, `color`, `fragment` e `puzzles[]`) e aggiorna `META.masterKey` / `META.masterAccept`:
-la chiave maestra è la **concatenazione dei `fragment` con un trattino**, nell'ordine delle zone.
-
-Dopo ogni modifica, **valida i contenuti**:
-
-```bash
-node test/validate-data.js     # oppure:  npm test
-```
-
-Il test controlla indici di risposta, campi obbligatori, id duplicati e che la chiave maestra
-corrisponda ai frammenti. (211 controlli sull'insieme di base.)
+- **Scena disegnata e animata** su `<canvas>`: rack con LED lampeggianti, monitor, porta blindata, luci, prospettiva.
+- **Hover + click** sugli apparati con etichette e contorno luminoso.
+- **Drag & drop** funzionante con **mouse e touch**.
+- **HUD**: slot del codice che si illuminano, cronometro, audio on/off, reset.
+- **Effetti sonori** sintetici (Web Audio, nessun file), disattivabili.
+- **Salvataggio** progressi in `localStorage`. **Responsive**. Rispetta `prefers-reduced-motion`.
 
 ---
 
@@ -106,27 +61,44 @@ corrisponda ai frammenti. (211 controlli sull'insieme di base.)
 
 ```
 EscapeRoom/
-├── index.html              # pagina e punto di montaggio
-├── css/
-│   └── style.css           # stile "datacenter/terminale"
-├── js/
-│   ├── rooms.js            # CONTENUTI: zone, enigmi, indizi, spiegazioni
-│   └── game.js             # MOTORE: stato, schermate, punteggio, salvataggio
+├── index.html              # il gioco grafico (pagina principale)
+├── assets/
+│   ├── logic.js            # REGOLE pure degli enigmi (RAID, VM, rete, log) — testabili
+│   ├── scene.js            # disegno e animazione della sala su canvas + click sugli oggetti
+│   ├── puzzles.js          # i 4 enigmi interattivi (drag&drop, clic-per-collegare, log)
+│   ├── main.js             # stato, HUD, finestre, tastierino della porta, vittoria, salvataggio
+│   ├── audio.js            # effetti sonori sintetici
+│   └── style.css           # interfaccia (HUD, finestre, enigmi)
+├── docs/preview.png        # anteprima della scena
 ├── test/
-│   └── validate-data.js    # controllo d'integrità dei contenuti (no dipendenze)
-├── package.json            # script comodi (test / serve)
-└── README.md
+│   └── logic.test.js       # test delle regole degli enigmi (nessuna dipendenza)
+├── quiz/                   # versione precedente "a domande" (vedi sotto)
+└── package.json
 ```
+
+## ✅ Test
+
+```bash
+npm test        # regole del gioco + validazione contenuti della versione quiz (zero dipendenze)
+```
+
+Le **regole tecniche** (capacità RAID, overcommit RAM, percorso di rete, rilevamento brute-force) sono in
+`assets/logic.js`, separate dall'interfaccia e coperte da `test/logic.test.js`. Il flusso completo del gioco
+(apertura enigmi, soluzione, tastierino, fuga) è stato verificato end-to-end con jsdom durante lo sviluppo.
+
+## 🔧 Personalizzazione
+
+- **Regole/obiettivi** degli enigmi → `assets/logic.js` (es. capacità RAID o RAM del host).
+- **Parametri** dei singoli enigmi (dischi, VM, nodi, righe di log) → `assets/puzzles.js`.
+- **Codici e stazioni** (cifre, etichette) → `assets/main.js` (`G.stations`, `G.codeOrder`).
+- **Disposizione/aspetto** della sala → `assets/scene.js` (oggetto `LAYOUT`).
 
 ---
 
-## 🛠️ Dettagli tecnici
+## 📋 Versione "a domande" (quiz)
 
-- **Zero dipendenze, zero build:** solo HTML/CSS/JS. Icone SVG inline, nessun font esterno → funziona offline.
-- **Salvataggio progressi** via `localStorage` (degrada con grazia se non disponibile).
-- **Accessibilità:** navigazione da tastiera (Invio per confermare), `prefers-reduced-motion` rispettato,
-  layout responsive per mobile.
-- Compatibile con i browser moderni (usa `color-mix()` per le tinte d'accento).
+La prima versione — una escape room a **quiz** (4 zone, indizi e spiegazioni didattiche) — è conservata in
+**`quiz/`** e resta giocabile aprendo `quiz/index.html`. Utile come modalità di sola teoria/onboarding.
 
 ## 📄 Licenza
 

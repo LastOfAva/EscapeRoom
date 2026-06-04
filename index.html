@@ -3,36 +3,51 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Escape Room IT — gioco formativo per tecnici IT junior su storage, virtualizzazione, network e security."
-    />
-    <title>Escape Room IT — Lockdown in Datacenter</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='20' font-size='20'%3E%F0%9F%94%92%3C/text%3E%3C/svg%3E" />
-    <link rel="stylesheet" href="css/style.css" />
+    <meta name="description" content="Datacenter Lockdown — escape room grafica punta-e-clicca per tecnici IT: storage, virtualizzazione, network e security." />
+    <title>Datacenter Lockdown — Escape Room IT</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='20' font-size='20'%3E%F0%9F%96%A5%EF%B8%8F%3C/text%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="assets/style.css" />
   </head>
   <body>
-    <!-- Effetto scanline/CRT sovrapposto -->
-    <div class="scanlines" aria-hidden="true"></div>
-    <div class="grid-bg" aria-hidden="true"></div>
+    <!-- Barra di stato (codici, tempo, controlli) -->
+    <header id="hud"></header>
 
-    <!-- Punto di montaggio: tutto il gioco viene renderizzato qui da game.js -->
-    <main id="app" class="app"></main>
+    <!-- La sala datacenter, disegnata su canvas -->
+    <div id="stage">
+      <canvas id="scene" aria-label="Sala datacenter: clicca gli apparati per interagire"></canvas>
+    </div>
+    <p id="objective"></p>
+
+    <!-- Finestra modale: enigmi, tastierino della porta, vittoria -->
+    <div id="overlay" class="hidden" role="dialog" aria-modal="true">
+      <div class="modal">
+        <div class="modal-head">
+          <div>
+            <h2 id="modal-title">—</h2>
+            <p id="modal-sub"></p>
+          </div>
+          <div class="spacer"></div>
+          <button id="modal-close" title="Chiudi" aria-label="Chiudi">✕</button>
+        </div>
+        <div class="modal-body" id="puzzle-mount"></div>
+      </div>
+    </div>
+
+    <div id="toast" role="status"></div>
 
     <footer class="site-foot">
-      Escape Room IT · strumento formativo per tecnici · storage · virtualizzazione · network · security
+      Datacenter Lockdown · escape room formativa · storage · virtualizzazione · network · security
     </footer>
 
-    <!-- Avviso per browser con JavaScript disattivato -->
     <noscript>
-      <p style="color:#fff;text-align:center;padding:2rem">
-        Questo gioco richiede JavaScript attivo nel browser.
-      </p>
+      <p style="color:#fff;text-align:center;padding:2rem">Questo gioco richiede JavaScript attivo.</p>
     </noscript>
 
-    <!-- I dati (enigmi) vanno caricati prima del motore -->
-    <script src="js/rooms.js"></script>
-    <script src="js/game.js"></script>
+    <!-- Ordine di caricamento: logica → audio → scena → enigmi → regia -->
+    <script src="assets/logic.js"></script>
+    <script src="assets/audio.js"></script>
+    <script src="assets/scene.js"></script>
+    <script src="assets/puzzles.js"></script>
+    <script src="assets/main.js"></script>
   </body>
 </html>
