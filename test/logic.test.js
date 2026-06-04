@@ -48,5 +48,41 @@ const lines = [
 eq(L.attackerIp(lines, 3), "185.23.44.9", "rileva l'IP brute-force (4 FAILED)");
 eq(L.attackerIp([{ ip: "1.1.1.1", status: "FAILED", user: "x" }], 3), null, "un solo fallimento non basta per essere un attacco");
 
+console.log("\n[STORAGE / RAID6 — livello avanzato]");
+eq(L.raidUsable("RAID6", [2, 2, 2, 2, 2, 2]), 8, "RAID6 con 6×2TB = 8 TB (2 dischi di parità)");
+eq(L.raidTolerance("RAID6", 6), 2, "RAID6 tollera 2 guasti");
+eq(L.raidValid("RAID6", 3), false, "RAID6 richiede almeno 4 dischi");
+eq(L.storageSolved("RAID6", [2, 2, 2, 2, 2, 2], 8, 2), true, "soluzione RAID6: 8 TB tolleranti a 2 guasti");
+eq(L.storageSolved("RAID5", [2, 2, 2, 2, 2], 8, 2), false, "RAID5 non basta quando servono 2 guasti tollerati");
+
+console.log("\n[STORAGE / TIERING]");
+const corr = { db: "ssd", vmos: "ssd", backup: "hdd", archive: "tape" };
+eq(L.tieringSolved({ db: "ssd", vmos: "ssd", backup: "hdd", archive: "tape" }, corr), true, "ogni dato sul tier corretto");
+eq(L.tieringSolved({ db: "hdd", vmos: "ssd", backup: "hdd", archive: "tape" }, corr), false, "DB su HDD invece che SSD → errato");
+
+console.log("\n[VM / MULTI-HOST]");
+const vmS = { web: 4, db: 8, app: 4, cache: 6 };
+eq(L.vmMultiSolved({ web: 0, db: 1, app: 0 }, vmS, [12, 12], ["web", "db", "app"]), true, "VM richieste distribuite su 2 host senza overcommit");
+eq(L.vmMultiSolved({ web: 0, db: 0, app: 0 }, vmS, [12, 12], ["web", "db", "app"]), false, "tutte sullo stesso host (16>12) → overcommit");
+eq(L.vmMultiSolved({ web: 0, db: 1 }, vmS, [12, 12], ["web", "db", "app"]), false, "manca una VM richiesta (App)");
+
+console.log("\n[SUBNETTING]");
+eq(L.usableHosts(24), 254, "/24 → 254 host utilizzabili");
+eq(L.usableHosts(26), 62, "/26 → 62 host utilizzabili");
+eq(L.bestPrefixFor(50), 26, "per ≥50 host il prefisso più efficiente è /26 (62 host)");
+eq(L.subnetSolved(26, 50), true, "scegliere /26 per 50 host è corretto");
+eq(L.subnetSolved(24, 50), false, "/24 funziona ma spreca indirizzi → non ottimale");
+eq(L.subnetSolved(27, 50), false, "/27 (30 host) è troppo piccolo");
+
+console.log("\n[FIREWALL]");
+const rules = [
+  { id: "a", kind: "attacker" },
+  { id: "b", kind: "legit" },
+  { id: "c", kind: "legit" },
+];
+eq(L.firewallSolved(rules, { a: "deny", b: "allow", c: "allow" }), true, "nega l'attaccante, consente i legittimi");
+eq(L.firewallSolved(rules, { a: "allow", b: "allow", c: "allow" }), false, "consentire l'attaccante → errato");
+eq(L.firewallSolved(rules, { a: "deny", b: "deny", c: "allow" }), false, "negare un legittimo → errato");
+
 console.log(`\n=== Esito logica: ${failed === 0 ? "TUTTI I TEST PASSATI ✅" : failed + " FALLITI ❌"} ===`);
 process.exit(failed === 0 ? 0 : 1);

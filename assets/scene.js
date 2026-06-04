@@ -202,6 +202,20 @@
     v.addColorStop(1, "rgba(0,0,0,0.55)");
     ctx.fillStyle = v;
     ctx.fillRect(0, 0, W, H);
+
+    // tinta d'ambiente e nome del livello corrente
+    if (G.levelInfo) {
+      ctx.save();
+      ctx.globalAlpha = 0.06;
+      ctx.fillStyle = G.levelInfo.tint;
+      ctx.fillRect(0, 0, W, H);
+      ctx.restore();
+      ctx.fillStyle = "rgba(220,232,255,0.55)";
+      ctx.font = "bold 13px ui-monospace, monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "alphabetic";
+      ctx.fillText("LIVELLO " + G.levelInfo.n + " — " + String(G.levelInfo.name).toUpperCase(), W / 2, 38);
+    }
   }
 
   // --- Rack (storage / vm) ------------------------------------------------

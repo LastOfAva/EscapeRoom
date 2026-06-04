@@ -500,6 +500,66 @@ html, body {
 }
 #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+/* --- HUD: livello, modalità, indizi ------------------------------------- */
+.hud-level { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 2px 7px; }
+.hud-mode { font-family: var(--mono); font-size: 0.78rem; font-weight: 700; }
+.hud-hints { font-family: var(--mono); font-size: 0.8rem; color: #ffe6a8; }
+
+/* --- Schermata iniziale: scelta modalità -------------------------------- */
+.mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; }
+@media (max-width: 560px) { .mode-grid { grid-template-columns: 1fr; } }
+.mode-card {
+  --mc: var(--cyan);
+  text-align: left; cursor: pointer;
+  display: grid; gap: 6px; align-content: start;
+  background: #0a0f17; border: 1px solid var(--line); border-left: 4px solid var(--mc);
+  border-radius: 12px; padding: 14px; color: var(--text);
+  transition: transform 0.12s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.mode-card:hover { transform: translateY(-2px); border-color: var(--mc); box-shadow: 0 0 22px color-mix(in srgb, var(--mc) 30%, transparent); }
+.mc-name { font-family: var(--mono); font-weight: 800; font-size: 1.05rem; color: #fff; }
+.mc-desc { font-size: 0.84rem; color: var(--muted); }
+
+/* --- Storage tiering ---------------------------------------------------- */
+.tier-pool { min-height: 70px; }
+.tier-zones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+@media (max-width: 560px) { .tier-zones { grid-template-columns: 1fr; } }
+.dropzone.tier { min-height: 96px; }
+.dropzone.tier .zone-lbl small { color: var(--muted); font-weight: 400; }
+.data-item {
+  cursor: grab; user-select: none;
+  display: grid; gap: 2px; padding: 8px 12px; border-radius: 9px;
+  background: linear-gradient(160deg, #233048, #161f2e); border: 1px solid rgba(255, 255, 255, 0.14);
+  border-left: 4px solid var(--cyan); width: 100%;
+}
+.data-item b { font-size: 0.9rem; }
+.di-note { font-size: 0.74rem; color: var(--muted); }
+.data-item.dragging { cursor: grabbing; transform: scale(1.03); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6); }
+
+/* --- Subnetting --------------------------------------------------------- */
+.prefix-btns { display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 0 12px; }
+.prefix-btn {
+  font-family: var(--mono); font-size: 1rem; font-weight: 700;
+  padding: 10px 16px; border-radius: 10px; cursor: pointer;
+  background: #0a0f17; border: 1px solid var(--line); color: var(--text);
+}
+.prefix-btn:hover { border-color: var(--green); }
+.prefix-btn.on { background: color-mix(in srgb, var(--green) 22%, transparent); border-color: var(--green); color: #fff; }
+.subnet-readout { font-family: var(--mono); font-size: 0.95rem; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: #0a0f17; }
+.subnet-readout b.good { color: var(--green); }
+.subnet-readout b.bad { color: var(--red); }
+
+/* --- Firewall ----------------------------------------------------------- */
+.fw-table { display: grid; gap: 8px; }
+.fw-rule { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #0a0f17; }
+.fw-info { flex: 1; display: grid; gap: 2px; }
+.fw-info b { font-family: var(--mono); }
+.fw-note { font-size: 0.8rem; color: var(--muted); }
+.fw-actions { display: flex; gap: 6px; }
+.fw-toggle { font-family: var(--mono); font-size: 0.78rem; font-weight: 700; padding: 7px 12px; border-radius: 8px; cursor: pointer; background: #131c2b; border: 1px solid var(--line); color: var(--muted); }
+.fw-allow.on { background: color-mix(in srgb, var(--green) 25%, transparent); border-color: var(--green); color: #eaffe9; }
+.fw-deny.on { background: color-mix(in srgb, var(--red) 25%, transparent); border-color: var(--red); color: #ffeaea; }
+
 .site-foot { text-align: center; color: var(--muted); font-family: var(--mono); font-size: 0.72rem; padding: 6px 16px 26px; opacity: 0.7; }
 
 @media (prefers-reduced-motion: reduce) {
